@@ -1,0 +1,184 @@
+#include <iostream>
+#include <string>
+#include <cctype> // For isalpha() and isdigit()
+using namespace std;
+
+// Function to validate user input based on alphabetic or numeric requirements
+string getValidString(const string &prompt, bool alphabeticOnly = true) {
+    string input;
+    while (true) {
+        cout << prompt;
+        getline(cin >> ws, input); // Allows multi-word input
+
+        bool valid = true;
+        for (char c : input) {
+            if (alphabeticOnly && !isalpha(c) && c != ' ') { // Allow spaces for multi-word input
+                valid = false;
+                break;
+            } else if (!alphabeticOnly && !isdigit(c)) { // Ensure input is numeric if required
+                valid = false;
+                break;
+            }
+        }
+
+        if (valid) return input; // Return valid input
+        cout << "Invalid input. Please try again.\n";
+    }
+}
+
+int main() {
+    // Constants for seat numbers
+    const int VIP_SEATS = 30;
+    const int STANDARD_SEATS = 70;
+
+    // Arrays to track reserved seats for VIP and Standard sections
+    bool vipSeats[VIP_SEATS] = {false};
+    bool standardSeats[STANDARD_SEATS] = {false};
+
+    // Arrays to store user details
+    string names[100], genres[100], sections[100];
+    int ages[100], seatNumbers[100];
+    int userCount = 0; // Counter for total reservations
+
+    while (true) {
+        int choice;
+        // Display main menu
+        cout << "======================================\n";
+        cout << "     Theater Seat Reservation System\n";
+        cout << "======================================\n";
+        cout << "1. Reserve a VIP Seat\n";
+        cout << "2. Reserve a Standard Seat\n";
+        cout << "3. View Seat Status\n";
+        cout << "4. Search for a Reservation\n";
+        cout << "5. Exit\n";
+        cout << "======================================\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 5) break; // Exit program
+
+        if (choice == 1  choice == 2) {
+            // Determine section based on choice
+            string section = (choice == 1) ? "VIP" : "Standard";
+            bool* seats = (choice == 1) ? vipSeats : standardSeats;
+            int size = (choice == 1) ? VIP_SEATS : STANDARD_SEATS;
+
+            // Get valid name
+            string name = getValidString("Enter your name: ");
+
+            // Get valid genre
+            string genre = getValidString("Enter your preferred genre: ");
+
+            // Validate and get age
+            int age;
+            while (true) {
+                cout << "Enter your age: ";
+                cin >> age;
+
+                if (cin.fail()  age <= 0) { // Check for valid positive integer
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "Invalid age. Please enter a valid positive number.\n";
+                } else {
+                    break;
+                }
+            }
+
+            // Find the first available seat in the chosen section
+            int seatNumber = -1;
+            for (int i = 0; i < size; ++i) {
+                if (!seats[i]) { // If seat is available
+                    seats[i] = true; // Reserve seat
+                    seatNumber = i + 1 + (choice == 2 ? VIP_SEATS : 0);
+                    break;
+                }
+            }
+
+            // Handle full section and offer alternate section
+            if (seatNumber == -1) {
+                cout << section << " section is full. ";
+
+                bool* otherSeats = (section == "VIP") ? standardSeats : vipSeats;
+                int otherSize = (section == "VIP") ? STANDARD_SEATS : VIP_SEATS;
+// Check if the other section has available seats
+                bool otherSectionAvailable = false;
+                for (int i = 0; i < otherSize; ++i) {
+                if (!otherSeats[i]) {
+                        otherSectionAvailable = true;
+                        break;
+                    }
+                }
+     if (otherSectionAvailable) {
+                    cout << "Would you like to be seated in "
+                         << (section == "VIP" ? "Standard" : "VIP")
+                         << " section? (yes/no): ";
+                    string response;
+                    cin >> response;
+
+                    if (response == "yes") {
+                        section = (section == "VIP") ? "Standard" : "VIP";
+                        for (int i = 0; i < otherSize; ++i) {
+                            if (!otherSeats[i]) {
+                                otherSeats[i] = true; // Reserve seat in alternate section
+                                seatNumber = i + 1 + (section == "Standard" ? VIP_SEATS : 0);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    cout << "Sorry, no seats are available in either section.\n";
+                }
+            }
+
+            if (seatNumber != -1) {
+                // Save reservation details
+                names[userCount] = name;
+                genres[userCount] = genre;
+                ages[userCount] = age;
+                seatNumbers[userCount] = seatNumber;
+                sections[userCount] = section;
+                userCount++;
+
+                // Confirm reservation
+                cout << "Reservation successful! Ticket:\n";
+                cout << "Name: " << name << endl;
+                cout << "Genre: " << genre << endl;
+                cout << "Age: " << age << endl;
+                cout << "Seat: " << seatNumber << endl;
+                cout << "Section: " << section << endl;
+            }
+        } else if (choice == 3) { // Display seat status
+            cout << "VIP Seats:\n";
+            for (int i = 0; i < VIP_SEATS; ++i) {
+                cout << "Seat " << (i + 1) << ": " << (vipSeats[i] ? "Reserved" : "Available") << endl;
+            }
+            cout << "\nStandard Seats:\n";
+            for (int i = 0; i < STANDARD_SEATS; ++i) {
+                cout << "Seat " << (i + 1 + VIP_SEATS) << ": " << (standardSeats[i] ? "Reserved" : "Available") << endl;
+            }
+        } else if (choice == 4) { // Search reservation by name
+            string name = getValidString("Enter the name to search: ");
+            bool found = false;
+
+            for (int i = 0; i < userCount; ++i) {
+                if (names[i] == name) { // Match found
+                    cout << "Name: " << names[i]
+                         << ", Genre: " << genres[i]
+                         << ", Age: " << ages[i]
+                         << ", Seat: " << seatNumbers[i]
+                         << ", Section: " << sections[i] << endl;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                cout << "No reservation found for " << name << endl;
+            }
+        } else {
+            cout << "Invalid choice! Try again.\n";
+        }
+    }
+
+    return 0;
+}
