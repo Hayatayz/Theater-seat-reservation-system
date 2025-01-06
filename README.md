@@ -98,7 +98,8 @@ is an essential part of the software development life cycle (SDLC) that ensures 
 Deployment 
 The program runs in a console environment. After compiling, it’s ready for use without any additional setup. The menu-driven interface makes it simple for users to interact with the system.
 
-    Maintenance 
+Maintenance 
+    
 The code is modular and well-organized, making it easy to update. 
 
 The software development life cycle of our project is all above. 
