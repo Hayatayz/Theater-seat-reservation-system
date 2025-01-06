@@ -10,6 +10,8 @@ The design of the system revolves around simplicity and modularity. The program 
 Algorithm are
 
 Step 1: Initialize Constants and Variables
+
+
 1. Define constants for the number of VIP and Standard seats:
 VIP_SEATS = 30
 STANDARD_SEATS = 70
@@ -23,18 +25,31 @@ sections[100]: To store the section ("VIP" or "Standard").
 ages[100]: To store user ages.
 seatNumbers[100]: To store reserved seat numbers.
 4. Set userCount = 0 to track the number of reservations.
+
+   
 Step 2: Define Utility Functions
+
+
+
 1. getValidString(prompt, alphabeticOnly): Repeatedly prompt the user for input until a valid string is entered.
 If alphabeticOnly = true, ensure the string contains only alphabetic characters or spaces.
 If alphabeticOnly = false, ensure the string contains only numeric characters.
+
+
 Step 3: Display Main Menu
+
+
 1. Display options for the user:
      1. Reserve a VIP Seat.
      2. Reserve a Standard Seat.
     3. View Seat Status.
     4. Search for a Reservation.
     5. Exit.
+  
+       
 Step 4: Handle User Choice
+
+
 1. If the choice is 5: Exit the program.
 2. If the choice is 1 or 2: Reserve a Seat
 Determine the section (VIP for 1, Standard for 2) and corresponding seat array and size.
@@ -59,11 +74,35 @@ Search for the name in the names array:
 If found, display the corresponding reservation details.
 If not found, display a "No reservation found" message.
 5. If the choice is invalid: Display an error message.
+
+   
 Step 5: Repeat
+
+
 1. Return to the main menu and allow the user to make another choice until they choose to exit.
 Step 6: Exit the Program
 1. Terminate the program when the user chooses 5.
-   	
+
+   Implementation 
+The system was implemented with the following features:
+1. Arrays: Used to track seat reservations and store user data like names, ages, and genres.
+2. Validation Functions: Functions like isAlpha ensure names only contain letters, while isNumber validates ages.
+3. Seat Reservation Logic: Finds the first available seat in the chosen section and assigns it to the user.
+4. Error Handling: If a section is full, users are prompted to switch to another section.
+5. Modular Code: Functions handle specific tasks, such as displaying the menu or searching reservations, which keeps the code clean and easy to maintain.
+
+Testing 
+is an essential part of the software development life cycle (SDLC) that ensures a software application meets the required specifications and functions correctly.
+
+
+Deployment 
+The program runs in a console environment. After compiling, it’s ready for use without any additional setup. The menu-driven interface makes it simple for users to interact with the system.
+
+    Maintenance 
+The code is modular and well-organized, making it easy to update. 
+
+The software development life cycle of our project is all above. 
+
 
 
 
